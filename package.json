@@ -1,0 +1,27 @@
+{
+  "name": "help-desk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ngrok": "^3.2.7",
+    "node-fetch": "^2.6.0",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giancarlosxlr/help-desk.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/giancarlosxlr/help-desk/issues"
+  },
+  "homepage": "https://github.com/giancarlosxlr/help-desk#readme"
+}

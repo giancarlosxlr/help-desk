@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <title>Alt360.ai Demo</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <base href="/">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <style>
+        *,
+        *:before,
+        *::after {
+            text-decoration: none;
+            line-height: 1.1;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -ms-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            font-family: inherit;
+            font-size: inherit;
+            color: inherit;
+            font-weight: inherit;
+            user-select: none;
+            appearance: none;
+            -webkit-appearance: none;
+            list-style: none;
+            background-repeat: no-repeat;
+            transition: all 300ms ease-out 0ms;
+        }
+
+        body {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            font-family: "Arial";
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: center;
+            background-color: #fe7f05;
+        }
+
+        #container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 1400px;
+            padding: 60px;
+        }
+
+        header {
+            width: 100%;
+            display: flex;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            z-index: 1;
+            transition: all 300ms ease-out 0ms;
+        }
+
+        header h3 {
+            font-size: 18px;
+            margin-bottom: 30px;
+            width: 100%;
+            text-align: center;
+            color: #ffffff;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+        }
+
+        #qr_code {
+            width: 200px;
+            height: 200px;
+            box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+        }
+
+        #qr_code.loaded {
+            opacity: 1;
+        }
+
+        .chat {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            width: 100%;
+            flex: 1;
+            transform: translate(0, 360px);
+            opacity: 0.6;
+        }
+
+        .content {
+            border-radius: 8px;
+            background-color: #ffffff;
+            box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.8);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            background-color: #f1f1f1;
+            width: 400px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            padding-right: 5px;
+        }
+
+        .area {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .channel {
+            position: absolute;
+            left: 0;
+            bottom: calc(100% + 10px);
+            opacity: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        .channel p {
+            color: #ffffff;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+            font-size: 17px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+
+        .channel a {
+            color: #ffffff;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+            font-size: 17px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: solid 1px #ffffff;
+            padding: 0 1px;
+        }
+
+
+        .channel p span {
+            display: block;
+            background-color: #13e40b;
+            box-shadow: 0 0 6px 1px #13e40b;
+            width: 12px;
+            height: 12px;
+            border-radius: 100%;
+            margin-left: 10px;
+        }
+
+        #container.connected .channel {
+            opacity: 1;
+        }
+
+        #container.connected header {
+            opacity: 0;
+        }
+
+        #container.connected .chat {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+
+        #contacts {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scroll {
+            width: 100%;
+            flex: 1;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .scroll::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+            background:rgba(0,0,0,0);
+            border-radius: 10px;
+
+          }
+        
+          .scroll::-webkit-scrollbar-thumb {
+            background: #3a3a3a;
+            border-radius: 10px;
+          }
+        
+          .scroll::-webkit-scrollbar-button {
+            height: 5px;
+            opacity: 0;
+          }
+
+        .contact {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .contact.active {
+            background-color: #d7d7d7;
+        }
+
+        .contact .icon {
+            width: 50px;
+            height: 50px;
+            margin-right: 20px;
+            border-radius: 100%;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.6), inset 0 0 2px 0px rgba(0, 0, 0, 0.4);
+            background: #3a3a3a;
+        }
+
+        .contact .icon::after{
+            font-family: "FontAwesome";
+            content: "\f232";
+            color: #fff;
+            font-size: 27px;
+        }
+
+        .contact .info {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .contact .info label {
+            width: 100%;
+            text-align: left;
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #3a3a3a;
+        }
+
+        .contact .info p {
+            width: 100%;
+            text-align: left;
+            font-size: 13px;
+            color: #a7a7a7;
+        }
+
+        .contact .state p {
+            text-align: left;
+            font-size: 15px;
+            font-weight: bold;
+            color: #a7a7a7;
+            text-transform: uppercase;
+        }
+
+        .contact .state p.auto {
+            color: #5aa872;
+        }
+
+        .contact .state p.manual {
+            display: none;
+            color: #a85a5a;
+        }
+
+        .contact.manual .state p.manual {
+            display: block;
+        }
+
+        .contact.manual .state p.auto {
+            display: none;
+        }
+
+        .header{
+            width: 100%;
+            background: #3a3a3a;
+            height: 100px;
+            box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header .icon {
+
+            margin-right: 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header .icon::after{
+            font-family: "FontAwesome";
+            content: "\f232";
+            color: #fff;
+            font-size: 55px;
+        }
+
+        .header .info {
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+        }
+
+        .header .info label {
+            width: 100%;
+            text-align: left;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .header .info p {
+            width: 100%;
+            text-align: left;
+            font-size: 15px;
+            color: #ffffff;
+            opacity: 0.7;
+        }
+
+        .header .state p {
+            text-align: left;
+            font-size: 18px;
+            font-weight: bold;
+            color: #a7a7a7;
+            text-transform: uppercase;
+        }
+
+        .header .state p.auto {
+            color: #5aa872;
+        }
+
+        .header .state p.manual {
+            display: none;
+            color: #a85a5a;
+        }
+
+        .header.manual .state p.manual {
+            display: block;
+        }
+
+        .header.manual .state p.auto {
+            display: none;
+        }
+
+        .footer{
+            width: 100%;
+            padding: 20px;
+            background-color: #d7d7d7;
+            box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+        }
+
+        .footer input{
+            width: 100%;
+            flex: 1;
+            height: 40px;
+            border-radius: 25px;
+            color: #3a3a3a;
+            padding: 0 20px;
+            font-size: 16px;
+            background: #ffffff;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .footer button{
+            margin-left: 20px;
+            height: 40px;
+            border-radius: 25px;
+            color: #3a3a3a;
+            padding: 0 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background: #ffffff;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="connected">
+        <header>
+            <h3>Faça um scan do QR Code para se conectar ao canal.</h3>
+            <img id="qr_code" />
+        </header>
+        <div class="chat">
+            <div class="channel">
+                <p>Whatsapp<span></span></p>
+                <a>Disconnect</a>
+            </div>
+            <div class="content">
+                <div class="sidebar">
+                    <div class="scroll">
+                        <div id="contacts">
+                        </div>
+                    </div>
+                </div>
+                <div class="area">
+                    <div id="header" class="header">
+                        <div class="icon"></div>
+                        <div class="info">
+                            <label></label>
+                            <p></p>
+                        </div>
+                        <div class="state">
+                            <p class="auto">Auto</p>
+                            <p class="manual">Manual</p>
+                        </div>
+                    </div>
+                    <div class="scroll"></div>
+                    <form class="footer">
+                        <input />
+                        <button>send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"
+    integrity="sha256-bQmrZe4yPnQrLTY+1gYylfNMBuGfnT/HKsCGX+9Xuqo=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+    integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+<script>
+    var socket = io();
+
+    var qr_code_counter;
+    var contacs = {
+        loader: false,
+        items: [],
+        page: 0
+    }
+
+    var active;
+
+
+
+
+
+
+
+    function setWhatsApp() {
+        clearTimeout(qr_code_counter);
+        socket.emit('api_call', {
+            method: 'POST',
+            path: 'channels/whatsapp'
+        }, (response) => {
+            const img = document.querySelector('#qr_code')
+            img.src = response.data.qr_code;
+            img.onload = function () {
+                img.classList.add('loaded');
+            }
+
+            qr_code_counter = setTimeout(() => {
+                setWhatsApp();
+            }, response.data.expires_in * 1000);
+        });
+    }
+
+    function setActive(contact) {
+        document.querySelectorAll('.contact').forEach((n) => {
+            n.classList.remove('active');
+        });
+
+        if(contact){
+            contact.node.classList.add('active');
+            active = contact;
+            const header = document.querySelector('#header');
+            let match = active.item.external_identifier.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/);
+            header.querySelector('label').innerText = `+${ match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}`;
+            header.querySelector('p').innerText = moment(active.item.lastUpdate).format('hh:mm - DD/MM/YYYY');
+
+        }
+        
+    }
+
+
+    function appendContact(item) {
+        const node = document.createElement('div');
+        node.classList.add('contact');
+        node.classList.add(item.state);
+
+        let match = item.external_identifier.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/);
+
+        node.innerHTML = `
+                    <div class="icon"></div>
+                    <div class="info">
+                        <label>+${ match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}</label>
+                        <p>${moment(item.lastUpdate).format('hh:mm - DD/MM/YYYY')}</p>
+                    </div>
+                    <div class="state">
+                        <p class="auto">Auto</p>
+                        <p class="manual">Manual</p>
+                    </div>
+                `;
+
+
+
+        const contact = {
+            node: node,
+            item: item
+        }
+        contacs.items.push(contact);
+
+        node.addEventListener('click', () => {
+            setActive(contact);
+        });
+
+        document.querySelector('#contacts').appendChild(node);
+    }
+
+    function loadContacts() {
+        if (contacs.loader) return;
+        contacs.loader = true;
+        socket.emit('api_call', {
+            method: 'GET',
+            path: 'contacts',
+            params: {
+                limit: 20,
+                page: contacs.page,
+                channel: 'whatsapp'
+            }
+        }, (response) => {
+
+
+            contacs.page = response.data.page;
+
+            for (let item of response.data.content) {
+                appendContact(item);
+            }
+
+            if(!active || !contacs.items.find((a)=> active == a)){
+                setActive(contacs.items[0]);
+            }
+
+            contacs.loader = true;
+        });
+    }
+
+
+    socket.on('channel:whatsapp:connect', function (data) {
+
+    });
+
+
+    socket.on('channel:whatsapp:disconnect', function (data) {
+
+    });
+
+
+    loadContacts();
+    // setWhatsApp();
+
+</script>
+
+</html>
