@@ -10,7 +10,7 @@
     <meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet" crossorigin="anonymous">
     <style>
         *,
         *:before,
@@ -131,10 +131,10 @@
             z-index: 1;
             display: flex;
             flex-direction: column;
-            padding-right: 5px;
+            border-right: solid 2px #f1f1f1;
         }
 
-        .area {
+        #area {
             flex: 1;
             width: 100%;
             position: relative;
@@ -207,6 +207,7 @@
         #contacts {
             width: 100%;
             display: flex;
+            border-right: solid 2px #f1f1f1;
             flex-direction: column;
         }
 
@@ -220,20 +221,19 @@
         .scroll::-webkit-scrollbar {
             width: 5px;
             height: 5px;
-            background:rgba(0,0,0,0);
             border-radius: 10px;
 
-          }
-        
-          .scroll::-webkit-scrollbar-thumb {
-            background: #3a3a3a;
+        }
+
+        .scroll::-webkit-scrollbar-thumb {
+            background: #006ea0;
             border-radius: 10px;
-          }
-        
-          .scroll::-webkit-scrollbar-button {
+        }
+
+        .scroll::-webkit-scrollbar-button {
             height: 5px;
             opacity: 0;
-          }
+        }
 
         .contact {
             width: 100%;
@@ -246,6 +246,7 @@
 
         .contact.active {
             background-color: #d7d7d7;
+            box-shadow: inset 5px 0 0px 0px #006ea0;
         }
 
         .contact .icon {
@@ -261,8 +262,7 @@
             background: #3a3a3a;
         }
 
-        .contact .icon::after{
-            font-family: "FontAwesome";
+        .contact .icon::after {
             content: "\f232";
             color: #fff;
             font-size: 27px;
@@ -318,7 +318,7 @@
             display: none;
         }
 
-        .header{
+        .header {
             width: 100%;
             background: #3a3a3a;
             height: 100px;
@@ -338,8 +338,7 @@
             justify-content: center;
         }
 
-        .header .icon::after{
-            font-family: "FontAwesome";
+        .header .icon::after {
             content: "\f232";
             color: #fff;
             font-size: 55px;
@@ -371,6 +370,14 @@
             opacity: 0.7;
         }
 
+        .header .state {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            cursor: pointer;
+            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.7));
+        }
+
         .header .state p {
             text-align: left;
             font-size: 18px;
@@ -379,24 +386,32 @@
             text-transform: uppercase;
         }
 
-        .header .state p.auto {
+
+        .header .state p::after {
             color: #5aa872;
+            content: "Auto";
         }
 
-        .header .state p.manual {
-            display: none;
+        .header .state span {
+            margin-left: 8px;
+        }
+
+        .header .state span::after {
+            content: "\f021";
+            color: #5aa872;
+            font-size: 30px;
+        }
+
+        #area.manual .header .state p::after {
+            content: "Manual";
             color: #a85a5a;
         }
 
-        .header.manual .state p.manual {
-            display: block;
+        #area.manual .header .state span::after {
+            color: #a85a5a;
         }
 
-        .header.manual .state p.auto {
-            display: none;
-        }
-
-        .footer{
+        .footer {
             width: 100%;
             padding: 20px;
             background-color: #d7d7d7;
@@ -407,7 +422,7 @@
 
         }
 
-        .footer input{
+        .footer input {
             width: 100%;
             flex: 1;
             height: 40px;
@@ -419,7 +434,7 @@
             box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .footer button{
+        .footer button {
             margin-left: 20px;
             height: 40px;
             border-radius: 25px;
@@ -432,6 +447,127 @@
             text-transform: uppercase;
             cursor: pointer;
         }
+
+        #messages {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .message {
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .message:not(.last) {
+            margin-bottom: 10px;
+        }
+
+        .message.last:not(:last-child) {
+            margin-bottom: 20px;
+        }
+
+        .message .icon {
+            width: 49px;
+            height: 49px;
+            border-radius: 100%;
+            background: #eaeaea;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px 0 0;
+            box-shadow: 0 0 4px 0 rgba(0,0,0,0.7);
+            opacity: 0;
+            font-size: 22px;
+            color: #3a3a3a;
+        }
+
+
+
+        .message.reply .icon::after {
+            content: "\f544";
+        }
+
+        .message.promotional .icon::after {
+            content: "\f641";
+        }
+
+        .message.transactional .icon::after {
+            content: "\f07a";
+        }
+
+        .message.incomming .icon::after {
+            content: "\f007";
+        }
+
+        .message.outcoming .icon::after {
+            content: "\f590";
+        }
+
+        .message.first .icon {
+            opacity: 1;
+        }
+
+
+        .balloon {
+            padding: 15px;
+            max-width: 90%;
+            position: relative;
+            background: #eaeaea;
+            box-shadow: 0 0 4px 0 rgba(0,0,0,0.7);
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .message.first .balloon{
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        .message.last .balloon{
+            border-top-right-radius: 16px;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        
+        /* .message.promotional.first .balloon::after {
+            content: "Promotional";
+            font-size: 9px;
+            color: #3a3a3a;
+            position: absolute;
+            bottom: 100%;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            left: 10px;
+            background: #eaeaea;
+            padding: 4px 6px;
+            box-shadow: 0 -2px 2px 0 rgba(0,0,0,0.3);
+        } */
+
+        .balloon.error {
+            background-color: rgb(184, 68, 68);
+        }
+
+        .balloon .text {
+            color: #3a3a3a;
+            font-size: 15px;
+            line-height: 1.3;
+            white-space: pre-wrap;
+
+        }
+
+        .balloon .text:not(:last-child) {
+            margin-bottom: 10px;
+        }
+
+        
     </style>
 </head>
 
@@ -453,19 +589,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="area">
+                <div id="area">
                     <div id="header" class="header">
-                        <div class="icon"></div>
+                        <div class="icon fab"></div>
                         <div class="info">
                             <label></label>
                             <p></p>
                         </div>
                         <div class="state">
-                            <p class="auto">Auto</p>
-                            <p class="manual">Manual</p>
+                            <p></p>
+                            <span class="fas"></span>
                         </div>
                     </div>
-                    <div class="scroll"></div>
+                    <div class="scroll">
+                        <div id="messages"></div>
+                    </div>
                     <form class="footer">
                         <input />
                         <button>send</button>
@@ -483,7 +621,13 @@
     var socket = io();
 
     var qr_code_counter;
-    var contacs = {
+    var contacts = {
+        loader: false,
+        items: [],
+        page: 0
+    }
+
+    var messages = {
         loader: false,
         items: [],
         page: 0
@@ -520,16 +664,24 @@
             n.classList.remove('active');
         });
 
-        if(contact){
+
+
+
+        if (contact && active != contact) {
+            this.messages.items = [];
+            this.messages.nodes = [];
+            document.querySelector('#messages').innerHTML = '';
             contact.node.classList.add('active');
             active = contact;
             const header = document.querySelector('#header');
             let match = active.item.external_identifier.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/);
-            header.querySelector('label').innerText = `+${ match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}`;
+            header.querySelector('label').innerText = `+${match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}`;
             header.querySelector('p').innerText = moment(active.item.lastUpdate).format('hh:mm - DD/MM/YYYY');
-
+            document.querySelector('#area').classList.remove('auto', 'manual');
+            document.querySelector('#area').classList.add(active.item.state);
+            loadMessages();
         }
-        
+
     }
 
 
@@ -539,9 +691,8 @@
         node.classList.add(item.state);
 
         let match = item.external_identifier.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/);
-
         node.innerHTML = `
-                    <div class="icon"></div>
+                    <div class="icon fab"></div>
                     <div class="info">
                         <label>+${ match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}</label>
                         <p>${moment(item.lastUpdate).format('hh:mm - DD/MM/YYYY')}</p>
@@ -558,7 +709,7 @@
             node: node,
             item: item
         }
-        contacs.items.push(contact);
+        contacts.items.push(contact);
 
         node.addEventListener('click', () => {
             setActive(contact);
@@ -568,32 +719,100 @@
     }
 
     function loadContacts() {
-        if (contacs.loader) return;
-        contacs.loader = true;
+        if (contacts.loader) return;
+        contacts.loader = true;
         socket.emit('api_call', {
             method: 'GET',
             path: 'contacts',
             params: {
                 limit: 20,
-                page: contacs.page,
-                channel: 'whatsapp'
+                page: contacts.page,
+                channel: 'whatsapp',
+                sort: '-lastUpdate'
             }
         }, (response) => {
-
-
-            contacs.page = response.data.page;
+            contacts.page = response.data.page;
 
             for (let item of response.data.content) {
                 appendContact(item);
             }
 
-            if(!active || !contacs.items.find((a)=> active == a)){
-                setActive(contacs.items[0]);
+            if (!active || !contacts.items.find((a) => active == a)) {
+                setActive(contacts.items[0]);
             }
 
-            contacs.loader = true;
+            contacts.loader = true;
         });
     }
+
+    function appendMessage(item) {
+        const node = document.createElement('div');
+        node.classList.add('message');
+        node.classList.add(item.type);
+
+        node.innerHTML = `
+            <div class="icon fas"></div>
+            <div class="balloon ${item.status}">
+                <pre class="text">${item.text}</pre>
+            </div>
+                `;
+
+        const message = {
+            node: node,
+            item: item
+        }
+
+        messages.items.push(message);
+
+        node.addEventListener('click', () => {
+            setActive(contact);
+        });
+
+        document.querySelector('#messages').appendChild(node);
+    }
+
+
+    function loadMessages() {
+        if (messages.loader) return;
+        messages.loader = true;
+        socket.emit('api_call', {
+            method: 'GET',
+            path: 'messages',
+            params: {
+                limit: 50,
+                page: messages.page,
+                contact: active.item.id,
+                channel: 'whatsapp'
+            }
+        }, (response) => {
+
+            messages.page = response.data.page;
+
+            for (let item of response.data.content) {
+                appendMessage(item);
+            }
+
+
+            for (let i=0;i<messages.items.length;i++) {
+
+
+
+
+
+                if(!messages.items[i - 1] || messages.items[i - 1].type != messages.items[i].type){
+                    messages.items[i].node.classList.add('first');
+                }
+
+                if(!messages.items[i + 1] || messages.items[i + 1].type != messages.items[i].type){
+                    messages.items[i].node.classList.add('last');
+                }
+            }
+            
+
+            messages.loader = false;
+        });
+    }
+
 
 
     socket.on('channel:whatsapp:connect', function (data) {
