@@ -63,6 +63,10 @@
             padding: 60px;
         }
 
+        #container.load {
+            display: none;
+        }
+
         header {
             width: 100%;
             display: flex;
@@ -105,7 +109,8 @@
             width: 100%;
             flex: 1;
             transform: translate(0, 360px);
-            opacity: 0.6;
+            opacity: 0.3;
+            pointer-events: none;
         }
 
         .content {
@@ -131,7 +136,6 @@
             z-index: 1;
             display: flex;
             flex-direction: column;
-            border-right: solid 2px #f1f1f1;
         }
 
         #area {
@@ -201,14 +205,15 @@
         #container.connected .chat {
             opacity: 1;
             transform: translate(0, 0);
+            pointer-events: auto;
         }
 
 
         #contacts {
             width: 100%;
             display: flex;
-            border-right: solid 2px #f1f1f1;
             flex-direction: column;
+            position: relative;
         }
 
         .scroll {
@@ -222,7 +227,7 @@
             width: 5px;
             height: 5px;
             border-radius: 10px;
-
+            background-color: #d7d7d7;
         }
 
         .scroll::-webkit-scrollbar-thumb {
@@ -242,6 +247,8 @@
             align-items: center;
             padding: 20px;
             cursor: pointer;
+            position: absolute;
+            left: 0;
         }
 
         .contact.active {
@@ -293,31 +300,6 @@
             color: #a7a7a7;
         }
 
-        .contact .state p {
-            text-align: left;
-            font-size: 15px;
-            font-weight: bold;
-            color: #a7a7a7;
-            text-transform: uppercase;
-        }
-
-        .contact .state p.auto {
-            color: #5aa872;
-        }
-
-        .contact .state p.manual {
-            display: none;
-            color: #a85a5a;
-        }
-
-        .contact.manual .state p.manual {
-            display: block;
-        }
-
-        .contact.manual .state p.auto {
-            display: none;
-        }
-
         .header {
             width: 100%;
             background: #3a3a3a;
@@ -336,6 +318,19 @@
             flex-direction: row;
             align-items: center;
             justify-content: center;
+        }
+
+        .header button {
+            height: 40px;
+            border-radius: 25px;
+            color: #3a3a3a;
+            padding: 0 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #ffffff;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            cursor: pointer;
         }
 
         .header .icon::after {
@@ -370,45 +365,9 @@
             opacity: 0.7;
         }
 
-        .header .state {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            cursor: pointer;
-            filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.7));
-        }
-
-        .header .state p {
-            text-align: left;
-            font-size: 18px;
-            font-weight: bold;
-            color: #a7a7a7;
-            text-transform: uppercase;
-        }
-
-
-        .header .state p::after {
-            color: #5aa872;
-            content: "Auto";
-        }
-
-        .header .state span {
-            margin-left: 8px;
-        }
-
-        .header .state span::after {
-            content: "\f021";
-            color: #5aa872;
-            font-size: 30px;
-        }
-
-        #area.manual .header .state p::after {
-            content: "Manual";
-            color: #a85a5a;
-        }
-
-        #area.manual .header .state span::after {
-            color: #a85a5a;
+        #area.auto .footer input,
+        #area.auto .footer button {
+            opacity: 0;
         }
 
         .footer {
@@ -463,6 +422,84 @@
             align-items: flex-start;
         }
 
+        .message.attachment .file {
+            display: flex;
+        }
+
+        .message .file {
+            transition: none;
+            display: none;
+            flex-direction: row;
+            height: 50px;
+            background-color: #d7d7d7;
+            width: 350px;
+            border-radius: 6px;
+            align-items: stretch;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        .message .file.preview > * {
+            display: none!important;
+        }
+
+        .message .file.preview {
+            width: 200px;
+            height: 200px;
+            background-position: center;
+            background-size: cover;
+        }
+
+        .message .file .download {
+            width: 50px;
+            background-color: #ffffff;
+            font-size: 23px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            color: #3a3a3a;
+
+        }
+
+        .message .file .info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8px;
+            width: 100%;
+            overflow: hidden;
+
+        }
+
+        .message .file .info .filename {
+            color: #3a3a3a;
+            font-size: 15px;
+            font-weight: bold;
+            width: 100%;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            margin-bottom: 3px;
+        }
+
+
+        .message .file .info .size {
+            color: #3a3a3a;
+            font-size: 12px;
+            width: 100%;
+            text-align: left;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+
+        }
+
+
+
         .message:not(.last) {
             margin-bottom: 10px;
         }
@@ -481,7 +518,7 @@
             align-items: center;
             justify-content: center;
             margin: 0 10px 0 0;
-            box-shadow: 0 0 4px 0 rgba(0,0,0,0.7);
+            box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.7);
             opacity: 0;
             font-size: 22px;
             color: #3a3a3a;
@@ -501,12 +538,30 @@
             content: "\f07a";
         }
 
-        .message.incomming .icon::after {
+        .message.incoming .icon::after {
             content: "\f007";
         }
 
         .message.outcoming .icon::after {
             content: "\f590";
+        }
+
+        .message.outcoming {
+            flex-direction: row-reverse;
+        }
+
+        .message.outcoming .icon {
+            background: #006ea0;
+            color: #ffffff;
+            margin: 0 0 0 10px;
+        }
+
+        .message.outcoming .balloon {
+            background: #006ea0;
+        }
+
+        .message.outcoming .text {
+            color: #ffffff;
         }
 
         .message.first .icon {
@@ -519,24 +574,24 @@
             max-width: 90%;
             position: relative;
             background: #eaeaea;
-            box-shadow: 0 0 4px 0 rgba(0,0,0,0.7);
+            box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.7);
             border-top-right-radius: 16px;
             border-bottom-right-radius: 16px;
         }
 
-        .message.first .balloon{
+        .message.first .balloon {
             border-top-left-radius: 16px;
             border-top-right-radius: 16px;
             border-bottom-right-radius: 16px;
         }
 
-        .message.last .balloon{
+        .message.last .balloon {
             border-top-right-radius: 16px;
             border-bottom-left-radius: 16px;
             border-bottom-right-radius: 16px;
         }
 
-        
+
         /* .message.promotional.first .balloon::after {
             content: "Promotional";
             font-size: 9px;
@@ -558,7 +613,7 @@
         .balloon .text {
             color: #3a3a3a;
             font-size: 15px;
-            line-height: 1.3;
+            line-height: 1.4;
             white-space: pre-wrap;
 
         }
@@ -566,13 +621,11 @@
         .balloon .text:not(:last-child) {
             margin-bottom: 10px;
         }
-
-        
     </style>
 </head>
 
 <body>
-    <div id="container" class="connected">
+    <div id="container" class="load">
         <header>
             <h3>Faça um scan do QR Code para se conectar ao canal.</h3>
             <img id="qr_code" />
@@ -580,11 +633,11 @@
         <div class="chat">
             <div class="channel">
                 <p>Whatsapp<span></span></p>
-                <a>Disconnect</a>
+                <a id="disconnect">Disconnect</a>
             </div>
             <div class="content">
                 <div class="sidebar">
-                    <div class="scroll">
+                    <div class="scroll" id="scrollContacts">
                         <div id="contacts">
                         </div>
                     </div>
@@ -596,17 +649,14 @@
                             <label></label>
                             <p></p>
                         </div>
-                        <div class="state">
-                            <p></p>
-                            <span class="fas"></span>
-                        </div>
+                        <button type="button" id="solve">Solve</button>
                     </div>
-                    <div class="scroll">
+                    <div class="scroll" id="scrollMessages">
                         <div id="messages"></div>
                     </div>
-                    <form class="footer">
-                        <input />
-                        <button>send</button>
+                    <form id="form" class="footer">
+                        <input id="text" type="text" />
+                        <button type="submit">send</button>
                     </form>
                 </div>
             </div>
@@ -635,9 +685,154 @@
 
     var active;
 
+    const scrolls = [
+        {
+            element: document.querySelector('#scrollMessages'),
+            scrolled: false,
+            scrollHeight: 0,
+            scrollTop: 0,
+            reverse: true,
+            reachBottom: function () {
+
+            },
+            reachTop() {
+
+            }
+        },
+        {
+            element: document.querySelector('#scrollContacts'),
+            scrolled: false,
+            scrollHeight: 0,
+            scrollTop: 0,
+            reverse: false,
+            reachBottom: function () {
+
+            },
+            reachTop() {
+
+            }
+        }
+    ];
+
+    window.addEventListener('mouseup', function () {
+        for (let item of scrolls) {
+            if (item.scrolled) {
+                if ((item.element.scrollTop + 15) >= (item.element.scrollHeight - item.element.offsetHeight)) {
+                    item.scrolled = false;
+                    if (item.hasScroll) item.reachBottom();
+                }
+
+                if (item.element.scrollTop < 15) {
+                    if (item.hasScroll) item.reachTop();
+                }
+            }
+        }
+    });
+
+    scrolls.forEach(function (item) {
+        item.element.addEventListener("wheel", () => {
+            item.scrolled = true;
+            clearTimeout(item.timeout);
+            item.timeout = setTimeout(() => {
+                if ((item.element.scrollTop + 15) >= (item.element.scrollHeight - item.element.offsetHeight)) {
+                    if (item.element.scrollHeight > item.element.offsetHeight) item.reachBottom();
+                    item.scrolled = false;
+                }
+                if (item.element.scrollTop < 15) {
+                    if (item.element.scrollHeight > item.element.offsetHeight) item.reachTop();
+                }
+            }, 200);
+        });
+
+        item.element.addEventListener('mousedown', () => {
+            item.scrolled = true;
+        });
+
+    });
 
 
 
+    function tick() {
+        requestAnimationFrame(() => {
+            for (let item of scrolls) {
+                if (item.element && item.reverse) {
+                    const scrollHeight = item.element.scrollHeight;
+                    const scrollTop = item.element.scrollTop;
+
+                    if (item.scrolled && (!scrollTop || scrollTop != item.scrollTop) && scrollHeight != item.scrollHeight) {
+                        item.element.scrollTop = item.scrollTop + (scrollHeight - item.scrollHeight);
+                    }
+                    if (!item.scrolled) {
+                        item.element.scrollTop = scrollHeight;
+                    }
+                    item.scrollHeight = scrollHeight;
+                    item.scrollTop = item.element.scrollTop;
+                }
+            }
+            tick();
+        });
+    }
+
+    document.querySelector('#disconnect').addEventListener('click', function () {
+        socket.emit('api_call', {
+            method: 'DELETE',
+            path: 'channels/whatsapp',
+        }, (response) => {
+
+        });
+    });
+
+    document.querySelector('#form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const input = document.querySelector('#text');
+
+        socket.emit('api_call', {
+            method: 'POST',
+            path: 'message',
+            body: {
+                contact: active.item.id,
+                text: input.value
+            }
+        }, (response) => {
+            input.value = '';
+        });
+    });
+
+
+    document.querySelector('#form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        socket.emit('api_call', {
+            method: 'POST',
+            path: 'messages',
+            body: {
+                contact: active.item.id,
+                text: document.querySelector('#text').value
+            }
+        }, (response) => {
+            document.querySelector('#text').value = "";
+        });
+    });
+
+
+    document.querySelector('#solve').addEventListener('click', function (e) {
+        socket.emit('api_call', {
+            method: 'PATCH',
+            path: 'contacts/' + active.item.id,
+            body: {
+                state: 'auto',
+            }
+        }, (response) => {
+
+            const index = contacts.items.indexOf(active);
+            active.node.remove();
+            contacts.items.splice(index, 1);
+
+            setActive(contacts.items[0]);
+        });
+    });
 
 
 
@@ -659,13 +854,30 @@
         });
     }
 
+    function formatNumber(number) {
+        let phone, match;
+        switch (number.length) {
+            case 13:
+                match = number.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/);
+                phone = `+${match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}`;
+                break;
+            case 12:
+                match = number.match(/^(\d{2})(\d{2})(\d{4})(\d{4})$/);
+                phone = `+${match[1]} (${match[2]}) ${match[3]}-${match[4]}`;
+                break;
+            case 11:
+                match = number.match(/^(\d{3})(\d{4})(\d{4})$/);
+                phone = `+55 (${match[1]}) ${match[2]}-${match[3]}`;
+                break;
+        }
+
+        return phone;
+    }
+
     function setActive(contact) {
         document.querySelectorAll('.contact').forEach((n) => {
             n.classList.remove('active');
         });
-
-
-
 
         if (contact && active != contact) {
             this.messages.items = [];
@@ -674,11 +886,9 @@
             contact.node.classList.add('active');
             active = contact;
             const header = document.querySelector('#header');
-            let match = active.item.external_identifier.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/);
-            header.querySelector('label').innerText = `+${match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}`;
+            header.querySelector('label').innerText = formatNumber(active.item.external_identifier);
             header.querySelector('p').innerText = moment(active.item.lastUpdate).format('hh:mm - DD/MM/YYYY');
-            document.querySelector('#area').classList.remove('auto', 'manual');
-            document.querySelector('#area').classList.add(active.item.state);
+            messages.page = 0;
             loadMessages();
         }
 
@@ -686,20 +896,14 @@
 
 
     function appendContact(item) {
+        if(!item)return;
         const node = document.createElement('div');
         node.classList.add('contact');
-        node.classList.add(item.state);
-
-        let match = item.external_identifier.match(/^(\d{2})(\d{2})(\d{1})(\d{4})(\d{4})$/);
         node.innerHTML = `
                     <div class="icon fab"></div>
                     <div class="info">
-                        <label>+${ match[1]} (${match[2]}) ${match[3]} ${match[4]}-${match[5]}</label>
+                        <label>${formatNumber(item.external_identifier)}</label>
                         <p>${moment(item.lastUpdate).format('hh:mm - DD/MM/YYYY')}</p>
-                    </div>
-                    <div class="state">
-                        <p class="auto">Auto</p>
-                        <p class="manual">Manual</p>
                     </div>
                 `;
 
@@ -718,6 +922,23 @@
         document.querySelector('#contacts').appendChild(node);
     }
 
+
+
+    function sortContacts() {
+        contacts.items.sort(function (a, b) {
+            return new Date(b.item.lastUpdate) - new Date(a.item.lastUpdate);
+        });
+
+        let height = 0;
+
+        contacts.items.forEach((contact, index) => {
+            contact.node.style.top = height + 'px';
+            height += contact.node.offsetHeight;
+        });
+
+        document.querySelector('#contacts').style.height = height + "px";
+    }
+
     function loadContacts() {
         if (contacts.loader) return;
         contacts.loader = true;
@@ -728,11 +949,11 @@
                 limit: 20,
                 page: contacts.page,
                 channel: 'whatsapp',
+                state: 'manual',
                 sort: '-lastUpdate'
             }
         }, (response) => {
             contacts.page = response.data.page;
-
             for (let item of response.data.content) {
                 appendContact(item);
             }
@@ -741,7 +962,9 @@
                 setActive(contacts.items[0]);
             }
 
-            contacts.loader = true;
+            sortContacts();
+
+            contacts.loader = false;
         });
     }
 
@@ -750,9 +973,36 @@
         node.classList.add('message');
         node.classList.add(item.type);
 
+        if (item.attachment) {
+            socket.emit('api_call', {
+                method: 'GET',
+                path: 'files',
+                params: {
+                    id: item.attachment
+                }
+            }, (response) => {
+                const attachment = response.data.content[0];
+                node.classList.add('attachment');
+                const file = node.querySelector('.file');
+                file.querySelector('.filename').innerText = attachment.filename;
+                file.querySelector('.size').innerText = attachment.size;
+
+                file.addEventListener('click', ()=>{
+                    // download file
+                });
+            });
+        }
+
         node.innerHTML = `
             <div class="icon fas"></div>
-            <div class="balloon ${item.status}">
+            <div class="balloon">
+                <div class="file">
+                    <div class="fas fa-download download"></div>
+                    <div class="info">
+                        <p class="filename"></p>
+                        <p class="size"></p>      
+                    </div>
+                </div>
                 <pre class="text">${item.text}</pre>
             </div>
                 `;
@@ -764,11 +1014,22 @@
 
         messages.items.push(message);
 
-        node.addEventListener('click', () => {
-            setActive(contact);
-        });
-
         document.querySelector('#messages').appendChild(node);
+    }
+
+
+    function updateMessages() {
+        for (let i = 0; i < messages.items.length; i++) {
+            const item = messages.items[i];
+            item.node.classList.remove('first', 'last');
+            if (!messages.items[i - 1] || messages.items[i - 1].item.type != item.item.type) {
+                item.node.classList.add('first');
+            }
+
+            if (!messages.items[i + 1] || messages.items[i + 1].item.type != item.item.type) {
+                item.node.classList.add('last');
+            }
+        }
     }
 
 
@@ -782,51 +1043,81 @@
                 limit: 50,
                 page: messages.page,
                 contact: active.item.id,
-                channel: 'whatsapp'
+                channel: 'whatsapp',
+                sort: '-createdAt'
             }
         }, (response) => {
-
             messages.page = response.data.page;
 
-            for (let item of response.data.content) {
+            for (let item of response.data.content.reverse()) {
                 appendMessage(item);
             }
-
-
-            for (let i=0;i<messages.items.length;i++) {
-
-
-
-
-
-                if(!messages.items[i - 1] || messages.items[i - 1].type != messages.items[i].type){
-                    messages.items[i].node.classList.add('first');
-                }
-
-                if(!messages.items[i + 1] || messages.items[i + 1].type != messages.items[i].type){
-                    messages.items[i].node.classList.add('last');
-                }
-            }
-            
-
+            updateMessages();
             messages.loader = false;
         });
     }
 
 
 
-    socket.on('channel:whatsapp:connect', function (data) {
-
+    socket.on('channel:connect', function (data) {
+        if (data.channel.type == 'whatsapp') {
+            clearTimeout(qr_code_counter);
+            document.querySelector('#container').classList.add('connected');
+        }
     });
 
 
-    socket.on('channel:whatsapp:disconnect', function (data) {
+    socket.on('channel:disconnect', function (data) {
+        if (data.channel.type == 'whatsapp') {
+            setWhatsApp();
+            document.querySelector('#container').classList.remove('connected');
+        }
+    });
 
+    socket.on('message:create', function (data) {
+        if (active && data.message.contact == active.item.id) {
+            appendMessage(data.message);
+            updateMessages();
+        }
+
+        const contact = contacts.items.find((contact) => {
+            return contact.item.id == data.message.contact;
+        });
+
+        if (contact) {
+            contact.item.lastUpdate = data.message.createdAt;
+            sortContacts();
+        } else {
+            socket.emit('api_call', {
+                method: 'GET',
+                path: 'contacts',
+                params: {
+                    id: data.message.contact,
+                    state: 'manual',
+                }
+            }, (response) => {
+                appendContact(response.data.content[0]);
+                sortContacts();
+            });
+        }
+    });
+
+    socket.emit('api_call', {
+        method: 'GET',
+        path: 'channels',
+    }, (response) => {
+        const container = document.querySelector('#container');
+        if (response.data.whatsapp.connected) {
+            container.classList.add('connected');
+        } else {
+            setWhatsApp();
+        }
+        loadContacts();
+        container.classList.remove('load');
     });
 
 
-    loadContacts();
-    // setWhatsApp();
+    tick();
 
 </script>
 
