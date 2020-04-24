@@ -1,4 +1,4 @@
-# mflyer-wpp #
+# Help-desk Demo #
 
 
 ## Prerequisites
@@ -21,7 +21,7 @@ npm install
 ## Run
 Run project with:
 ```
-npm install
+npm start
 ```
 
 The browser will open on port 2626, now just scan the qr code with your smarthphone and start using.
